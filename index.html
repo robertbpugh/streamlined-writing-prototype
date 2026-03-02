@@ -396,6 +396,166 @@
     color: rgb(140, 140, 140);
   }
 
+  /* Social sharing (Jetpack Social style) */
+  .social-connections {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .social-connection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgb(240, 240, 240);
+  }
+  .social-connection:last-child { border-bottom: none; }
+  .social-connection-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .social-icon {
+    width: 20px;
+    height: 20px;
+    color: rgb(44, 51, 56);
+    flex-shrink: 0;
+  }
+  .social-connection-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .social-connection-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(16, 21, 23);
+  }
+  .social-connection-handle {
+    font-size: 12px;
+    color: rgb(140, 140, 140);
+  }
+
+  /* Toggle switch */
+  .toggle {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgb(195, 196, 199);
+    border-radius: 20px;
+    transition: 0.2s;
+  }
+  .toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  .toggle input:checked + .toggle-slider {
+    background: #3858E9;
+  }
+  .toggle input:checked + .toggle-slider:before {
+    transform: translateX(16px);
+  }
+
+  .social-message-area {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgb(240, 240, 240);
+  }
+  .social-message-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgb(80, 87, 94);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .social-message-input {
+    width: 100%;
+    border: 1px solid rgb(195, 196, 199);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    color: rgb(44, 51, 56);
+    resize: none;
+    outline: none;
+  }
+  .social-message-input:focus { border-color: #3858E9; }
+  .social-powered-by {
+    margin-top: 10px;
+    font-size: 11px;
+    color: rgb(140, 140, 140);
+  }
+
+  /* SEO section */
+  .seo-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .seo-preview {
+    background: white;
+    border: 1px solid rgb(230, 230, 230);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+  .seo-preview-title {
+    font-size: 16px;
+    color: #1a0dab;
+    font-weight: 400;
+    margin-bottom: 2px;
+    cursor: pointer;
+  }
+  .seo-preview-title:hover { text-decoration: underline; }
+  .seo-preview-url {
+    font-size: 12px;
+    color: #006621;
+    margin-bottom: 4px;
+  }
+  .seo-preview-desc {
+    font-size: 13px;
+    color: rgb(80, 87, 94);
+    line-height: 18px;
+  }
+  .seo-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .seo-field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgb(80, 87, 94);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .seo-field-input {
+    width: 100%;
+    border: 1px solid rgb(195, 196, 199);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    color: rgb(44, 51, 56);
+    outline: none;
+    height: auto;
+  }
+  .seo-field-input:focus { border-color: #3858E9; }
+  .seo-textarea { resize: none; }
+
   /* Tags select */
   .tags-select {
     width: 100%;
@@ -711,6 +871,10 @@
           Everyone
         </label>
         <label class="radio-option">
+          <input type="radio" name="audience" value="subscribed">
+          Anyone subscribed
+        </label>
+        <label class="radio-option">
           <input type="radio" name="audience" value="paid">
           Paid subscribers only
         </label>
@@ -726,8 +890,96 @@
     </div>
 
     <div class="publish-card">
+      <div class="publish-card-label">Share to social media</div>
+      <div class="social-connections">
+        <div class="social-connection">
+          <div class="social-connection-left">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/></svg>
+            <div class="social-connection-info">
+              <span class="social-connection-name">X (Twitter)</span>
+              <span class="social-connection-handle">@yourhandle</span>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="social-connection">
+          <div class="social-connection-left">
+            <svg class="social-icon" viewBox="0 0 24 24"><path d="M13.601 20.61a7.535 7.535 0 0 1-3.196 0c-2.334-.505-3.501-.758-4.373-1.9-.872-1.14-1.024-2.363-.87-4.806.092-1.452.38-3.108.867-5.082.362-1.468.543-2.202.961-2.726a2.97 2.97 0 0 1 .9-.773c.57-.323 1.325-.323 2.834-.323h2.753c1.509 0 2.264 0 2.834.323a2.97 2.97 0 0 1 .9.773c.418.524.6 1.258.96 2.726.488 1.974.776 3.63.868 5.082.154 2.443.002 3.665-.87 4.807-.872 1.14-2.04 1.394-4.373 1.9h-.195zM10.5 14.625c0 .898.672 1.625 1.5 1.625s1.5-.727 1.5-1.625S12.828 13 12 13s-1.5.727-1.5 1.625z" fill="currentColor"/></svg>
+            <div class="social-connection-info">
+              <span class="social-connection-name">Bluesky</span>
+              <span class="social-connection-handle">@you.bsky.social</span>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="social-connection">
+          <div class="social-connection-left">
+            <svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.425 1.808-2.425.853 0 1.265.64 1.265 1.408 0 .858-.546 2.14-.828 3.33-.236.995.499 1.806 1.48 1.806 1.778 0 3.144-1.874 3.144-4.58 0-2.393-1.72-4.068-4.177-4.068-2.845 0-4.515 2.134-4.515 4.34 0 .859.331 1.781.745 2.282a.3.3 0 0 1 .069.288l-.278 1.133c-.044.183-.145.222-.335.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.472 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.965-.527-2.291-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z" fill="currentColor"/></svg>
+            <div class="social-connection-info">
+              <span class="social-connection-name">Mastodon</span>
+              <span class="social-connection-handle">@you@mastodon.social</span>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="social-connection">
+          <div class="social-connection-left">
+            <svg class="social-icon" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor"/></svg>
+            <div class="social-connection-info">
+              <span class="social-connection-name">LinkedIn</span>
+              <span class="social-connection-handle">Your Name</span>
+            </div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="social-message-area">
+        <label class="social-message-label">Custom message</label>
+        <textarea class="social-message-input" placeholder="Write a custom message for your social posts..." rows="2"></textarea>
+      </div>
+      <div class="social-powered-by">Powered by Jetpack Social</div>
+    </div>
+
+    <div class="publish-card">
       <div class="publish-card-label">Add tags</div>
       <div class="tags-select">Select or create tags</div>
+    </div>
+
+    <div class="publish-card">
+      <div class="publish-card-label">SEO</div>
+      <div class="seo-section">
+        <div class="seo-preview">
+          <div class="seo-preview-title" id="seo-title">Your post title</div>
+          <div class="seo-preview-url" id="seo-url">yoursite.wordpress.com/your-post-title</div>
+          <div class="seo-preview-desc" id="seo-desc">Add a meta description to control how this post appears in search results.</div>
+        </div>
+        <div class="seo-fields">
+          <div class="seo-field">
+            <label class="seo-field-label">SEO title</label>
+            <input type="text" class="seo-field-input" placeholder="Defaults to post title">
+          </div>
+          <div class="seo-field">
+            <label class="seo-field-label">Meta description</label>
+            <textarea class="seo-field-input seo-textarea" placeholder="Write a concise summary for search engines..." rows="2"></textarea>
+          </div>
+          <div class="seo-field">
+            <label class="seo-field-label">URL slug</label>
+            <input type="text" class="seo-field-input" id="seo-slug" placeholder="your-post-title">
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="publish-card">
@@ -859,12 +1111,20 @@
   }
 
   function goToPublish() {
-    // Populate social preview from editor content
+    // Populate previews from editor content
     const title = document.getElementById('editor-title').value || 'Your post title';
     const body = document.getElementById('editor-body').value;
     const excerpt = body ? body.substring(0, 120) + (body.length > 120 ? '...' : '') : 'A preview of your post will appear here when shared on social media.';
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'your-post-title';
+
     document.getElementById('preview-title').textContent = title;
     document.getElementById('preview-excerpt').textContent = excerpt;
+
+    // SEO preview
+    document.getElementById('seo-title').textContent = title;
+    document.getElementById('seo-url').textContent = `${newsletterSlug}.wordpress.com/${slug}`;
+    document.getElementById('seo-desc').textContent = excerpt || 'Add a meta description to control how this post appears in search results.';
+    document.getElementById('seo-slug').value = slug;
 
     document.getElementById('screen-publish').classList.add('active');
     updateAnnotation(
