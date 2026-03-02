@@ -556,6 +556,24 @@
   .seo-field-input:focus { border-color: #3858E9; }
   .seo-textarea { resize: none; }
 
+  /* Publish card links */
+  .publish-card-links {
+    padding: 8px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .publish-link {
+    font-size: 13px;
+    color: #3858E9;
+    text-decoration: none;
+  }
+  .publish-link:hover { text-decoration: underline; }
+  .publish-link-sep {
+    color: rgb(195, 196, 199);
+    font-size: 13px;
+  }
+
   /* Tags select */
   .tags-select {
     width: 100%;
@@ -982,21 +1000,10 @@
       </div>
     </div>
 
-    <div class="publish-card">
-      <div class="publish-card-label">Social preview</div>
-      <div class="social-preview">
-        <div class="social-preview-title" id="preview-title">Your post title</div>
-        <div class="social-preview-excerpt" id="preview-excerpt">A preview of your post will appear here when shared on social media.</div>
-        <div class="social-preview-url" id="preview-url">yoursite.wordpress.com</div>
-      </div>
-    </div>
-
-    <div class="publish-card">
-      <div class="publish-card-label">Scheduling</div>
-      <label class="checkbox-option">
-        <input type="checkbox" id="schedule-checkbox">
-        Schedule for later
-      </label>
+    <div class="publish-card-links">
+      <a href="#" class="publish-link" onclick="event.preventDefault()">Social preview</a>
+      <span class="publish-link-sep">·</span>
+      <a href="#" class="publish-link" onclick="event.preventDefault()">Schedule for later</a>
     </div>
 
   </div>
@@ -1117,8 +1124,7 @@
     const excerpt = body ? body.substring(0, 120) + (body.length > 120 ? '...' : '') : 'A preview of your post will appear here when shared on social media.';
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'your-post-title';
 
-    document.getElementById('preview-title').textContent = title;
-    document.getElementById('preview-excerpt').textContent = excerpt;
+    // Social preview elements removed (available via link)
 
     // SEO preview
     document.getElementById('seo-title').textContent = title;
