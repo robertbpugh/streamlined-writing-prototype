@@ -592,99 +592,89 @@
     background-position: right 14px center;
   }
 
-  /* Publish footer */
-  .publish-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    border-top: 1px solid rgb(230, 230, 230);
-    padding: 16px 24px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 12px;
-    z-index: 210;
+  /* Big publish button */
+  .publish-big-button-area {
+    padding: 24px 0 0;
   }
-  .btn-cancel {
-    height: 40px;
-    padding: 0 20px;
-    background: white;
-    color: rgb(44, 51, 56);
-    border: 1px solid rgb(195, 196, 199);
-    border-radius: 2px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-  }
-  .btn-cancel:hover { background: rgb(248, 248, 248); }
-  .btn-send {
-    height: 40px;
-    padding: 0 24px;
+  .btn-publish-big {
+    width: 100%;
+    height: 56px;
     background: #3858E9;
     color: white;
     border: none;
-    border-radius: 2px;
-    font-size: 14px;
-    font-weight: 500;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
     font-family: inherit;
     cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
   }
-  .btn-send:hover { background: #2d4acc; }
+  .btn-publish-big:hover { background: #2d4acc; }
+  .btn-publish-big:active { transform: scale(0.98); }
 
-  /* Success state */
-  .success-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(16, 21, 23, 0.6);
-    z-index: 300;
+  /* Congrats screen */
+  .congrats-container {
+    max-width: 520px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
   }
-  .success-overlay.active { display: flex; }
-  .success-card {
-    background: white;
-    border-radius: 8px;
-    padding: 48px;
+  .congrats-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+  }
+  .congrats-heading {
     text-align: center;
-    max-width: 420px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+    margin-bottom: 8px;
   }
-  .success-icon {
-    width: 56px;
-    height: 56px;
-    background: #3858E9;
-    border-radius: 50%;
+  .congrats-links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .congrats-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.1s;
+  }
+  .congrats-link:first-child { border-top: 1px solid rgb(230, 230, 230); }
+  .congrats-link:hover { background: rgb(248, 248, 248); margin: 0 -16px; padding: 20px 16px; }
+  .congrats-link-icon {
+    width: 48px;
+    height: 48px;
+    background: rgb(240, 242, 255);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 24px;
-    color: white;
+    color: #3858E9;
+    flex-shrink: 0;
   }
-  .success-card h2 {
-    font-family: Georgia, 'Noto Serif', 'Times New Roman', serif;
-    font-size: 28px;
-    font-weight: 400;
-    margin-bottom: 8px;
+  .congrats-link-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .congrats-link-title {
+    font-size: 16px;
+    font-weight: 500;
     color: rgb(16, 21, 23);
   }
-  .success-card p {
-    font-size: 15px;
+  .congrats-link-desc {
+    font-size: 13px;
     color: rgb(80, 87, 94);
-    line-height: 22px;
-    margin-bottom: 24px;
   }
-  .success-card .btn-primary {
-    width: auto;
-    display: inline-block;
-    padding: 0 32px;
+  .congrats-link-arrow {
+    color: rgb(195, 196, 199);
+    flex-shrink: 0;
   }
 
   /* Annotations */
@@ -1008,19 +998,51 @@
 
   </div>
 
-  <div class="publish-footer">
-    <button class="btn-cancel" onclick="closePublish()">Cancel</button>
-    <button class="btn-send" onclick="sendPost()">Send to everyone now</button>
+    <div class="publish-big-button-area">
+      <button class="btn-publish-big" onclick="sendPost()">Publish & send</button>
+    </div>
+
   </div>
 </div>
 
-<!-- Success overlay -->
-<div class="success-overlay" id="screen-success">
-  <div class="success-card">
-    <div class="success-icon">✓</div>
-    <h2>Your post is live</h2>
-    <p>Sent to all subscribers. You just published your first newsletter post.</p>
-    <button class="btn-primary" onclick="showDashboard()">Go to dashboard</button>
+<!-- SCREEN 5: Congrats -->
+<div class="screen" id="screen-congrats">
+  <div class="congrats-container">
+    <div class="congrats-icon">&#x1f389;</div>
+    <h1 class="congrats-heading">Your first newsletter is live!</h1>
+    <p class="subtitle" style="margin-bottom: 40px; text-align: center;">It's out there. Subscribers will get it in their inbox. Here's what to do next.</p>
+    <div class="congrats-links">
+      <a href="#" class="congrats-link" onclick="event.preventDefault()">
+        <div class="congrats-link-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2 6C2 4.89543 2.89543 4 4 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6Z" stroke="currentColor" stroke-width="1.5"/><path d="M8 12H16M8 8H16M8 16H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="congrats-link-text">
+          <span class="congrats-link-title">View my newsletter</span>
+          <span class="congrats-link-desc">See your published post live on the web</span>
+        </div>
+        <svg class="congrats-link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="congrats-link" onclick="event.preventDefault()">
+        <div class="congrats-link-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="congrats-link-text">
+          <span class="congrats-link-title">Build my site</span>
+          <span class="congrats-link-desc">Customize your homepage, add pages, pick a theme</span>
+        </div>
+        <svg class="congrats-link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="congrats-link" onclick="event.preventDefault()">
+        <div class="congrats-link-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2Z" stroke="currentColor" stroke-width="1.5"/><path d="M2 12H22M12 2C14.5 4.5 16 8 16 12C16 16 14.5 19.5 12 22C9.5 19.5 8 16 8 12C8 8 9.5 4.5 12 2Z" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="congrats-link-text">
+          <span class="congrats-link-title">Pick a custom domain</span>
+          <span class="congrats-link-desc">Replace <span id="congrats-subdomain"></span> with your own address</span>
+        </div>
+        <svg class="congrats-link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -1150,63 +1172,11 @@
 
   function sendPost() {
     document.getElementById('screen-publish').classList.remove('active');
-    document.getElementById('screen-success').classList.add('active');
+    document.getElementById('congrats-subdomain').textContent = `${newsletterSlug}.wordpress.com`;
+    switchScreen('screen-congrats');
+    document.getElementById('comparison').style.display = 'none';
     updateAnnotation(
-      '<strong>Done.</strong> Name → Create → Write → Send. Four steps from zero to published newsletter. Current flow has 7 steps and a 9% completion rate.',
-      '✓', '✓'
-    );
-  }
-
-  function showDashboard() {
-    document.getElementById('screen-success').classList.remove('active');
-    // Reset to show launchpad-like tasks
-    switchScreen('screen-editor');
-    const container = document.querySelector('.editor-container');
-    container.innerHTML = `
-      <div style="max-width: 480px; margin: 40px auto; text-align: center;">
-        <h1 style="font-size: 32px; margin-bottom: 8px;">You're live</h1>
-        <p class="subtitle" style="margin-bottom: 32px;">Your newsletter is set up. Here's what to do next.</p>
-        <div style="text-align: left;">
-          <div style="padding: 16px 0; border-bottom: 1px solid rgb(230,230,230); display: flex; align-items: center; gap: 12px;">
-            <span style="color: rgb(195,196,199); font-size: 18px;">○</span>
-            <div>
-              <div style="font-size: 14px; font-weight: 500; color: rgb(16,21,23);">Get a custom domain</div>
-              <div style="font-size: 13px; color: rgb(80,87,94);">Replace ${newsletterSlug}.wordpress.com with your own address</div>
-            </div>
-          </div>
-          <div style="padding: 16px 0; border-bottom: 1px solid rgb(230,230,230); display: flex; align-items: center; gap: 12px;">
-            <span style="color: rgb(195,196,199); font-size: 18px;">○</span>
-            <div>
-              <div style="font-size: 14px; font-weight: 500; color: rgb(16,21,23);">Import your subscribers</div>
-              <div style="font-size: 13px; color: rgb(80,87,94);">Bring your audience from Substack, Mailchimp, or CSV</div>
-            </div>
-          </div>
-          <div style="padding: 16px 0; border-bottom: 1px solid rgb(230,230,230); display: flex; align-items: center; gap: 12px;">
-            <span style="color: rgb(195,196,199); font-size: 18px;">○</span>
-            <div>
-              <div style="font-size: 14px; font-weight: 500; color: rgb(16,21,23);">Choose a plan</div>
-              <div style="font-size: 13px; color: rgb(80,87,94);">Unlock a custom domain, paid subscriptions, and more</div>
-            </div>
-          </div>
-          <div style="padding: 16px 0; border-bottom: 1px solid rgb(230,230,230); display: flex; align-items: center; gap: 12px;">
-            <span style="color: rgb(195,196,199); font-size: 18px;">○</span>
-            <div>
-              <div style="font-size: 14px; font-weight: 500; color: rgb(16,21,23);">Customize your newsletter</div>
-              <div style="font-size: 13px; color: rgb(80,87,94);">Add a logo, pick colors, and set up your homepage</div>
-            </div>
-          </div>
-          <div style="padding: 16px 0; display: flex; align-items: center; gap: 12px;">
-            <span style="color: rgb(195,196,199); font-size: 18px;">○</span>
-            <div>
-              <div style="font-size: 14px; font-weight: 500; color: rgb(16,21,23);">Write your next post</div>
-              <div style="font-size: 13px; color: rgb(80,87,94);">Keep the momentum going</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-    updateAnnotation(
-      '<strong>Launchpad.</strong> Domain, subscribers, plan, and customization surface AFTER the creator has published. They already have skin in the game.',
+      '<strong>Done.</strong> Name → Create → Write → Send. Four steps from zero to published newsletter. What\'s next: View it, build the site, or pick a domain.',
       '✓', '✓'
     );
   }
