@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Creator Onboarding — Prototype</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, system-ui, 'Segoe UI', sans-serif; background: #fcfcfc; color: rgb(16, 21, 23); min-height: 100vh; }
+  .header { height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: relative; z-index: 10; }
+  .header svg { width: 24px; height: 24px; fill: rgb(44, 51, 56); }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header .log-in { font-size: 14px; font-weight: 500; color: rgb(29, 35, 39); text-decoration: none; cursor: pointer; }
+  .screen { display: none; flex-direction: column; align-items: center; padding: 80px 20px 80px; min-height: calc(100vh - 52px); }
+  .screen.active { display: flex; }
+  .content { width: 100%; max-width: 383px; }
+  h1 { font-family: Georgia, 'Noto Serif', 'Times New Roman', serif; font-size: 44px; font-weight: 400; line-height: 52px; color: rgb(16, 21, 23); margin-bottom: 8px; }
+  .subtitle { font-size: 16px; color: rgb(80, 87, 94); line-height: 24px; margin-bottom: 32px; }
+  label { display: block; font-size: 14px; font-weight: 500; color: rgb(29, 35, 39); margin-bottom: 8px; }
+  input[type="text"], input[type="email"] { width: 100%; height: 40px; border: 1px solid rgb(195, 196, 199); border-radius: 2px; padding: 7px 14px; font-size: 16px; font-family: inherit; color: rgb(60, 67, 74); outline: none; transition: border-color 0.15s; }
+  input:focus { border-color: #3858E9; }
+  .input-group { margin-bottom: 24px; }
+  .subdomain-preview { font-size: 13px; color: rgb(80, 87, 94); margin-top: 6px; }
+  .subdomain-preview span { color: rgb(16, 21, 23); font-weight: 500; }
+  .btn-primary { width: 100%; height: 44px; background: #3858E9; color: #fff; border: none; border-radius: 2px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; transition: background 0.15s; }
+  .btn-primary:hover { background: #2d4acc; }
+  .btn-primary:disabled { background: #b0bfff; cursor: default; }
+  .processing-center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 60vh; }
+  .spinner { width: 40px; height: 40px; border: 3px solid #e0e0e0; border-top-color: #3858E9; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 24px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .processing-steps { list-style: none; text-align: left; margin-top: 24px; }
+  .processing-steps li { font-size: 14px; color: rgb(80, 87, 94); padding: 6px 0; display: flex; align-items: center; gap: 8px; }
+  .processing-steps li.done { color: rgb(16, 21, 23); }
+  .processing-steps li .check { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .processing-steps li.done .check { background: #3858E9; color: white; }
+  .processing-steps li.pending .check { border: 1.5px solid rgb(195, 196, 199); }
+  .processing-steps li.active .check { border: 1.5px solid #3858E9; }
+  .editor-container { max-width: 720px; width: 100%; }
+  .editor-topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 0 12px; margin-bottom: 40px; }
+  .editor-topbar .back-arrow { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgb(80, 87, 94); cursor: pointer; background: none; border: none; font-family: inherit; }
+  .editor-topbar .back-arrow:hover { color: rgb(16, 21, 23); }
+  .editor-topbar-right { display: flex; align-items: center; gap: 12px; }
+  .editor-saved { font-size: 13px; color: rgb(80, 87, 94); }
+  .btn-continue-editor { height: 36px; padding: 0 20px; background: #3858E9; color: #fff; border: none; border-radius: 2px; font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; }
+  .btn-continue-editor:hover { background: #2d4acc; }
+  .editor-title { width: 100%; border: none; outline: none; font-family: Georgia, 'Noto Serif', 'Times New Roman', serif; font-size: 36px; font-weight: 400; line-height: 44px; color: rgb(16, 21, 23); margin-bottom: 16px; background: transparent; }
+  .editor-title::placeholder { color: rgb(195, 196, 199); }
+  .editor-body { width: 100%; border: none; outline: none; font-size: 18px; line-height: 28px; color: rgb(44, 51, 56); min-height: 300px; resize: none; font-family: inherit; background: transparent; }
+  .editor-body::placeholder { color: rgb(195, 196, 199); }
+  .publish-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fcfcfc; z-index: 200; overflow-y: auto; }
+  .publish-overlay.active { display: block; }
+  .publish-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid rgb(230, 230, 230); }
+  .publish-header h2 { font-family: inherit; font-size: 16px; font-weight: 600; color: rgb(16, 21, 23); }
+  .publish-close { width: 32px; height: 32px; border: none; background: none; font-size: 20px; cursor: pointer; color: rgb(80, 87, 94); display: flex; align-items: center; justify-content: center; border-radius: 2px; }
+  .publish-close:hover { background: rgb(240, 240, 240); }
+  .publish-body { max-width: 560px; margin: 32px auto; padding: 0 24px 40px; }
+  .publish-card { background: white; border: 1px solid rgb(230, 230, 230); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
+  .publish-card-label { font-size: 13px; font-weight: 600; color: rgb(16, 21, 23); margin-bottom: 14px; }
+  .radio-group { display: flex; flex-direction: column; gap: 10px; }
+  .radio-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: rgb(44, 51, 56); }
+  .radio-option input[type="radio"] { width: 18px; height: 18px; accent-color: #3858E9; cursor: pointer; }
+  .checkbox-option { display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgb(44, 51, 56); cursor: pointer; }
+  .checkbox-option input[type="checkbox"] { width: 18px; height: 18px; accent-color: #3858E9; cursor: pointer; }
+  .social-connections { display: flex; flex-direction: column; }
+  .social-connection { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgb(240, 240, 240); }
+  .social-connection:last-child { border-bottom: none; }
+  .social-connection-left { display: flex; align-items: center; gap: 10px; }
+  .social-icon { width: 20px; height: 20px; color: rgb(44, 51, 56); flex-shrink: 0; }
+  .social-connection-info { display: flex; flex-direction: column; }
+  .social-connection-name { font-size: 14px; font-weight: 500; color: rgb(16, 21, 23); }
+  .social-connection-handle { font-size: 12px; color: rgb(140, 140, 140); }
+  .toggle { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: rgb(195, 196, 199); border-radius: 20px; transition: 0.2s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+  .toggle input:checked + .toggle-slider { background: #3858E9; }
+  .toggle input:checked + .toggle-slider:before { transform: translateX(16px); }
+  .social-message-area { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgb(240, 240, 240); }
+  .social-message-label { font-size: 12px; font-weight: 500; color: rgb(80, 87, 94); margin-bottom: 6px; display: block; }
+  .social-message-input { width: 100%; border: 1px solid rgb(195, 196, 199); border-radius: 4px; padding: 8px 12px; font-size: 13px; font-family: inherit; color: rgb(44, 51, 56); resize: none; outline: none; }
+  .social-message-input:focus { border-color: #3858E9; }
+  .social-powered-by { margin-top: 10px; font-size: 11px; color: rgb(140, 140, 140); }
+  .seo-section { display: flex; flex-direction: column; gap: 16px; }
+  .seo-preview { background: white; border: 1px solid rgb(230, 230, 230); border-radius: 4px; padding: 14px 16px; }
+  .seo-preview-title { font-size: 16px; color: #1a0dab; font-weight: 400; margin-bottom: 2px; cursor: pointer; }
+  .seo-preview-title:hover { text-decoration: underline; }
+  .seo-preview-url { font-size: 12px; color: #006621; margin-bottom: 4px; }
+  .seo-preview-desc { font-size: 13px; color: rgb(80, 87, 94); line-height: 18px; }
+  .seo-fields { display: flex; flex-direction: column; gap: 12px; }
+  .seo-field-label { font-size: 12px; font-weight: 500; color: rgb(80, 87, 94); margin-bottom: 4px; display: block; }
+  .seo-field-input { width: 100%; border: 1px solid rgb(195, 196, 199); border-radius: 4px; padding: 8px 12px; font-size: 13px; font-family: inherit; color: rgb(44, 51, 56); outline: none; height: auto; }
+  .seo-field-input:focus { border-color: #3858E9; }
+  .seo-textarea { resize: none; }
+  .publish-link { font-size: 13px; color: #3858E9; text-decoration: none; }
+  .publish-link:hover { text-decoration: underline; }
+  .tags-select { width: 100%; height: 40px; border: 1px solid rgb(195, 196, 199); border-radius: 4px; padding: 7px 14px; font-size: 14px; font-family: inherit; color: rgb(140, 140, 140); background: white; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+  .btn-publish-big { width: 100%; height: 56px; background: #3858E9; color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background 0.15s, transform 0.1s; }
+  .btn-publish-big:hover { background: #2d4acc; }
+  .btn-publish-big:active { transform: scale(0.98); }
+  .publish-big-button-area { padding: 24px 0 0; }
+  .congrats-container { max-width: 520px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .congrats-icon { font-size: 56px; margin-bottom: 16px; }
+  .congrats-heading { text-align: center; margin-bottom: 8px; }
+  .congrats-links { width: 100%; display: flex; flex-direction: column; }
+  .congrats-link { display: flex; align-items: center; gap: 16px; padding: 20px 0; border-bottom: 1px solid rgb(230, 230, 230); text-decoration: none; color: inherit; transition: background 0.1s; }
+  .congrats-link:first-child { border-top: 1px solid rgb(230, 230, 230); }
+  .congrats-link:hover { background: rgb(248, 248, 248); margin: 0 -16px; padding: 20px 16px; }
+  .congrats-link-icon { width: 48px; height: 48px; background: rgb(240, 242, 255); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #3858E9; flex-shrink: 0; }
+  .congrats-link-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .congrats-link-title { font-size: 16px; font-weight: 500; color: rgb(16, 21, 23); }
+  .congrats-link-desc { font-size: 13px; color: rgb(80, 87, 94); }
+  .congrats-link-arrow { color: rgb(195, 196, 199); flex-shrink: 0; }
+  /* Subscribers section */
+  .subscriber-actions { display: flex; flex-direction: column; gap: 10px; }
+  .subscriber-action { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid rgb(230, 230, 230); border-radius: 6px; cursor: pointer; transition: border-color 0.15s; text-decoration: none; color: inherit; }
+  .subscriber-action:hover { border-color: #3858E9; }
+  .subscriber-action-icon { color: rgb(80, 87, 94); flex-shrink: 0; }
+  .subscriber-action-text { display: flex; flex-direction: column; gap: 1px; }
+  .subscriber-action-title { font-size: 14px; font-weight: 500; color: rgb(16, 21, 23); }
+  .subscriber-action-desc { font-size: 12px; color: rgb(140, 140, 140); }
+  .subscriber-note { font-size: 12px; color: rgb(140, 140, 140); margin-top: 6px; }
+  .annotation { position: fixed; bottom: 0; left: 0; right: 0; background: rgb(16, 21, 23); color: white; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 400; }
+  .annotation-text { font-size: 13px; line-height: 18px; }
+  .annotation-text strong { font-weight: 600; }
+  .annotation-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.5); margin-bottom: 3px; }
+  .annotation .step-indicator { font-size: 13px; color: rgba(255,255,255,0.5); white-space: nowrap; margin-left: 24px; }
+  .comparison { position: fixed; top: 52px; right: 20px; background: white; border: 1px solid rgb(230, 230, 230); border-radius: 4px; padding: 16px; width: 200px; font-size: 12px; line-height: 18px; z-index: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .comparison h3 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: rgb(80, 87, 94); margin-bottom: 10px; font-family: inherit; }
+  .comparison .flow-current, .comparison .flow-new { margin-bottom: 10px; }
+  .comparison .flow-label { font-weight: 600; margin-bottom: 3px; color: rgb(16, 21, 23); font-size: 11px; }
+  .comparison .step { color: rgb(140, 140, 140); padding: 1px 0; font-size: 11px; }
+  .comparison .step.active-step { color: #3858E9; font-weight: 600; }
+  .comparison .step.done-step { color: rgb(80, 87, 94); }
+  .comparison .stats { border-top: 1px solid rgb(240, 240, 240); margin-top: 8px; padding-top: 8px; }
+  .comparison .stat { display: flex; justify-content: space-between; padding: 2px 0; }
+  .comparison .stat .stat-label { color: rgb(140, 140, 140); font-size: 11px; }
+  .comparison .stat .stat-value { font-weight: 600; color: rgb(16, 21, 23); font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18.5c-4.694 0-8.5-3.806-8.5-8.5S7.306 3.5 12 3.5s8.5 3.806 8.5 8.5-3.806 8.5-8.5 8.5zm-1.5-3.25L7.5 7.5l3 7.75L14 7.5l-3.5 9.75z"/></svg>
+  <a class="log-in">Log in</a>
+</div>
+
+<div class="comparison" id="comparison">
+  <h3>New creator flow</h3>
+  <div class="flow-current">
+    <div class="flow-label">Current (7 steps)</div>
+    <div class="step">Setup · Goals · Domains</div>
+    <div class="step">Plans · Processing</div>
+    <div class="step">Subscribers · Launchpad</div>
+  </div>
+  <div class="flow-new">
+    <div class="flow-label" style="color: #3858E9;">New (4 steps)</div>
+    <div class="step active-step" id="comp-step-1">1. Name</div>
+    <div class="step" id="comp-step-2">2. Create site</div>
+    <div class="step" id="comp-step-3">3. Write</div>
+    <div class="step" id="comp-step-4">4. Publish</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><span class="stat-label">Current completion</span><span class="stat-value">9%</span></div>
+    <div class="stat"><span class="stat-label">Time to editor</span><span class="stat-value">~30s</span></div>
+  </div>
+</div>
+
+<!-- SCREEN 1: Name -->
+<div class="screen active" id="screen-setup">
+  <div class="content">
+    <h1>Name your newsletter</h1>
+    <p class="subtitle">You can always change this later. Let's get you writing.</p>
+    <div class="input-group">
+      <label for="newsletter-name">Newsletter name</label>
+      <input type="text" id="newsletter-name" placeholder="e.g. The Morning Brief" autofocus>
+      <div class="subdomain-preview" id="subdomain-preview"></div>
+    </div>
+    <button class="btn-primary" id="btn-continue" disabled onclick="goToProcessing()">Continue</button>
+  </div>
+</div>
+
+<!-- SCREEN 2: Processing -->
+<div class="screen" id="screen-processing">
+  <div class="processing-center">
+    <div class="spinner"></div>
+    <h1>Setting up your newsletter</h1>
+    <p class="subtitle">This takes about 10 seconds.</p>
+    <ul class="processing-steps">
+      <li class="active" id="step-site"><span class="check"></span> Creating your site</li>
+      <li class="pending" id="step-theme"><span class="check"></span> Applying newsletter template</li>
+      <li class="pending" id="step-settings"><span class="check"></span> Configuring email settings</li>
+      <li class="pending" id="step-ready"><span class="check"></span> Ready to write</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SCREEN 3: Editor -->
+<div class="screen" id="screen-editor" style="padding-top: 20px;">
+  <div class="editor-container">
+    <div class="editor-topbar">
+      <button class="back-arrow" onclick="void(0)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="editor-site-name"></span>
+      </button>
+      <div class="editor-topbar-right">
+        <span class="editor-saved">Saved</span>
+        <button class="btn-continue-editor" onclick="goToPublish()">Continue</button>
+      </div>
+    </div>
+    <input type="text" class="editor-title" placeholder="Title" id="editor-title">
+    <textarea class="editor-body" placeholder="Start writing..." id="editor-body"></textarea>
+  </div>
+</div>
+
+<!-- SCREEN 4: Publish (new user version) -->
+<div class="publish-overlay" id="screen-publish">
+  <div class="publish-header">
+    <h2>Publish</h2>
+    <button class="publish-close" onclick="closePublish()">&times;</button>
+  </div>
+  <div class="publish-body">
+
+    <div class="publish-card">
+      <div class="publish-card-label">Publish to</div>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="audience" value="everyone" checked>
+          Everyone (blog post, visible on the web)
+        </label>
+      </div>
+    </div>
+
+    <div class="publish-card">
+      <div class="publish-card-label">Add subscribers</div>
+      <p class="subscriber-note" style="margin-bottom: 12px; margin-top: -6px;">You don't have any subscribers yet. Add some so they get your next post by email.</p>
+      <div class="subscriber-actions">
+        <a href="#" class="subscriber-action" onclick="event.preventDefault()">
+          <svg class="subscriber-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M16 21V19C16 16.7909 14.2091 15 12 15H5C2.79086 15 1 16.7909 1 19V21M20 8V14M23 11H17M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="subscriber-action-text">
+            <span class="subscriber-action-title">Add manually</span>
+            <span class="subscriber-action-desc">Type in email addresses one by one</span>
+          </div>
+        </a>
+        <a href="#" class="subscriber-action" onclick="event.preventDefault()">
+          <svg class="subscriber-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="subscriber-action-text">
+            <span class="subscriber-action-title">Import from another platform</span>
+            <span class="subscriber-action-desc">Substack, Mailchimp, Ghost, or CSV file</span>
+          </div>
+        </a>
+      </div>
+      <p class="subscriber-note">You can skip this and add subscribers later.</p>
+    </div>
+
+    <div class="publish-card">
+      <div class="publish-card-label">Share to social media</div>
+      <div class="social-connections">
+        <div class="social-connection">
+          <div class="social-connection-left">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="none"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.5 12.068V11.2l.266-.057c1.9-.406 3.298-.862 4.158-1.357l.2-.116-.035-.228c-.485-3.156.524-5.349 2.002-6.794C9.586 1.201 11.397.5 12.65.5c.463 0 .88.065 1.238.196 1.396.504 2.166 1.548 2.291 3.104l.005.065-.02.062-.215.666-.48-.31c-.476-.308-1.065-.462-1.754-.462-.91 0-1.736.338-2.324.951-.582.607-.888 1.422-.888 2.358 0 .133.013.265.038.395l.072.378-.383.024c-1.63.102-3.348-.19-5.108-.867l-.474-.182.13.493c.69 2.615 2.063 4.723 4.074 6.26 1.725 1.318 3.776 2.092 5.778 2.178l.587.025-.21.547c-.48 1.256-1.476 2.203-2.88 2.735 1.074-.107 2.127-.38 3.13-.81l.782-.335-.396.73c-.955 1.765-2.432 3.088-4.267 3.822-.679.272-1.404.45-2.163.538l-.01.001z" fill="currentColor"/></svg>
+            <div class="social-connection-info"><span class="social-connection-name">Threads</span><span class="social-connection-handle">Connect account</span></div>
+          </div>
+          <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="social-connection">
+          <div class="social-connection-left">
+            <svg class="social-icon" viewBox="0 0 24 24"><path d="M13.601 20.61a7.535 7.535 0 0 1-3.196 0c-2.334-.505-3.501-.758-4.373-1.9-.872-1.14-1.024-2.363-.87-4.806.092-1.452.38-3.108.867-5.082.362-1.468.543-2.202.961-2.726a2.97 2.97 0 0 1 .9-.773c.57-.323 1.325-.323 2.834-.323h2.753c1.509 0 2.264 0 2.834.323a2.97 2.97 0 0 1 .9.773c.418.524.6 1.258.96 2.726.488 1.974.776 3.63.868 5.082.154 2.443.002 3.665-.87 4.807-.872 1.14-2.04 1.394-4.373 1.9h-.195zM10.5 14.625c0 .898.672 1.625 1.5 1.625s1.5-.727 1.5-1.625S12.828 13 12 13s-1.5.727-1.5 1.625z" fill="currentColor"/></svg>
+            <div class="social-connection-info"><span class="social-connection-name">Bluesky</span><span class="social-connection-handle">Connect account</span></div>
+          </div>
+          <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="social-powered-by">
+        Powered by Jetpack Social · <a href="#" class="publish-link" onclick="event.preventDefault()" style="font-size: 11px;">Social preview</a>
+      </div>
+    </div>
+
+    <div class="publish-card">
+      <div class="publish-card-label">Add tags</div>
+      <div class="tags-select">Select or create tags</div>
+    </div>
+
+    <div class="publish-card">
+      <div class="publish-card-label">SEO</div>
+      <div class="seo-section">
+        <div class="seo-preview">
+          <div class="seo-preview-title" id="seo-title">Your post title</div>
+          <div class="seo-preview-url" id="seo-url">yoursite.wordpress.com/your-post-title</div>
+          <div class="seo-preview-desc" id="seo-desc">Add a meta description to control how this post appears in search results.</div>
+        </div>
+        <div class="seo-fields">
+          <div class="seo-field"><label class="seo-field-label">SEO title</label><input type="text" class="seo-field-input" placeholder="Defaults to post title"></div>
+          <div class="seo-field"><label class="seo-field-label">Meta description</label><textarea class="seo-field-input seo-textarea" placeholder="Write a concise summary for search engines..." rows="2"></textarea></div>
+          <div class="seo-field"><label class="seo-field-label">URL slug</label><input type="text" class="seo-field-input" id="seo-slug" placeholder="your-post-title"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="publish-big-button-area">
+      <button class="btn-publish-big" onclick="sendPost()">Publish</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 5: Congrats -->
+<div class="screen" id="screen-congrats">
+  <div class="congrats-container">
+    <div class="congrats-icon">&#x1f389;</div>
+    <h1 class="congrats-heading">Your first newsletter is live!</h1>
+    <p class="subtitle" style="margin-bottom: 40px; text-align: center;">It's out there on the web. Now let's make it yours.</p>
+    <div class="congrats-links">
+      <a href="#" class="congrats-link" onclick="event.preventDefault()">
+        <div class="congrats-link-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2 6C2 4.89543 2.89543 4 4 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6Z" stroke="currentColor" stroke-width="1.5"/><path d="M8 12H16M8 8H16M8 16H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="congrats-link-text"><span class="congrats-link-title">View my newsletter</span><span class="congrats-link-desc">See your published post live on the web</span></div>
+        <svg class="congrats-link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="congrats-link" onclick="event.preventDefault()">
+        <div class="congrats-link-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3L4 9V21H9V14H15V21H20V9L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+        <div class="congrats-link-text"><span class="congrats-link-title">Build my site</span><span class="congrats-link-desc">Customize your homepage, add pages, pick a theme</span></div>
+        <svg class="congrats-link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="congrats-link" onclick="event.preventDefault()">
+        <div class="congrats-link-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2Z" stroke="currentColor" stroke-width="1.5"/><path d="M2 12H22M12 2C14.5 4.5 16 8 16 12C16 16 14.5 19.5 12 22C9.5 19.5 8 16 8 12C8 8 9.5 4.5 12 2Z" stroke="currentColor" stroke-width="1.5"/></svg></div>
+        <div class="congrats-link-text"><span class="congrats-link-title">Pick a custom domain</span><span class="congrats-link-desc">Replace <span id="congrats-subdomain"></span> with your own address</span></div>
+        <svg class="congrats-link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="annotation" id="annotation">
+  <div>
+    <div class="annotation-label">New Creator Onboarding — Prototype</div>
+    <div class="annotation-text" id="annotation-text"><strong>Step 1 of 4:</strong> One field. Name your newsletter, get a free subdomain. No domain search, no plan selection.</div>
+  </div>
+  <div class="step-indicator" id="step-indicator">1 / 4</div>
+</div>
+
+<script>
+  const nameInput = document.getElementById('newsletter-name');
+  const btnContinue = document.getElementById('btn-continue');
+  let newsletterSlug = '';
+
+  nameInput.addEventListener('input', () => {
+    const val = nameInput.value.trim();
+    btnContinue.disabled = val.length === 0;
+    if (val.length > 0) {
+      newsletterSlug = val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      document.getElementById('subdomain-preview').innerHTML = `Your site: <span>${newsletterSlug}.wordpress.com</span>`;
+    } else {
+      document.getElementById('subdomain-preview').innerHTML = '';
+    }
+  });
+
+  function switchScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+  function updateAnnotation(html, step, total) {
+    document.getElementById('annotation-text').innerHTML = html;
+    document.getElementById('step-indicator').textContent = `${step} / ${total || 4}`;
+  }
+  function updateComparisonStep(n) {
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById(`comp-step-${i}`);
+      if (i < n) { el.classList.remove('active-step'); el.classList.add('done-step'); }
+      else if (i === n) { el.classList.add('active-step'); el.classList.remove('done-step'); }
+      else { el.classList.remove('active-step', 'done-step'); }
+    }
+  }
+
+  function goToProcessing() {
+    switchScreen('screen-processing');
+    updateAnnotation('<strong>Step 2 of 4:</strong> Auto-create a free site with a newsletter template. No choices. About 10 seconds.', 2);
+    updateComparisonStep(2);
+    const steps = ['step-site', 'step-theme', 'step-settings', 'step-ready'];
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < steps.length) {
+        document.getElementById(steps[i]).classList.remove('pending', 'active');
+        document.getElementById(steps[i]).classList.add('done');
+        document.getElementById(steps[i]).querySelector('.check').textContent = '✓';
+        i++;
+        if (i < steps.length) { document.getElementById(steps[i]).classList.remove('pending'); document.getElementById(steps[i]).classList.add('active'); }
+      } else { clearInterval(interval); setTimeout(goToEditor, 600); }
+    }, 800);
+  }
+
+  function goToEditor() {
+    document.getElementById('editor-site-name').textContent = `${newsletterSlug}.wordpress.com`;
+    switchScreen('screen-editor');
+    updateAnnotation('<strong>Step 3 of 4:</strong> Clean writing surface. No sidebar, no block chrome. "Continue" leads to publish settings.', 3);
+    updateComparisonStep(3);
+    document.getElementById('editor-title').focus();
+  }
+
+  function goToPublish() {
+    const title = document.getElementById('editor-title').value || 'Your post title';
+    const body = document.getElementById('editor-body').value;
+    const excerpt = body ? body.substring(0, 120) + (body.length > 120 ? '...' : '') : '';
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'your-post-title';
+    document.getElementById('seo-title').textContent = title;
+    document.getElementById('seo-url').textContent = `${newsletterSlug}.wordpress.com/${slug}`;
+    document.getElementById('seo-desc').textContent = excerpt || 'Add a meta description to control how this post appears in search results.';
+    document.getElementById('seo-slug').value = slug;
+    document.getElementById('screen-publish').classList.add('active');
+    updateAnnotation('<strong>Step 4 of 4:</strong> New user: no subscribers yet. "Add subscribers" replaces audience picker. Import from Substack, Mailchimp, or add manually.', 4);
+    updateComparisonStep(4);
+  }
+
+  function closePublish() {
+    document.getElementById('screen-publish').classList.remove('active');
+    updateAnnotation('<strong>Step 3 of 4:</strong> Clean writing surface. No sidebar, no block chrome. "Continue" leads to publish settings.', 3);
+    updateComparisonStep(3);
+  }
+
+  function sendPost() {
+    document.getElementById('screen-publish').classList.remove('active');
+    document.getElementById('congrats-subdomain').textContent = `${newsletterSlug}.wordpress.com`;
+    switchScreen('screen-congrats');
+    document.getElementById('comparison').style.display = 'none';
+    updateAnnotation('<strong>Done.</strong> Name → Create → Write → Publish. New creator goes from zero to published in under 60 seconds.', '✓', '✓');
+  }
+</script>
+</body>
+</html>
