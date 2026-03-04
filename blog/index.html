@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>New Creator Onboarding — Prototype</title>
+<title>New Blogger Onboarding — Prototype</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -146,7 +146,7 @@
 </div>
 
 <div class="comparison" id="comparison">
-  <h3>New creator flow</h3>
+  <h3>New blogger flow</h3>
   <div class="flow-current">
     <div class="flow-label">Current (7 steps)</div>
     <div class="step">Setup · Goals · Domains</div>
@@ -169,10 +169,10 @@
 <!-- SCREEN 1: Name -->
 <div class="screen active" id="screen-setup">
   <div class="content">
-    <h1>Name your newsletter</h1>
+    <h1>Name your blog</h1>
     <p class="subtitle">You can always change this later. Let's get you writing.</p>
     <div class="input-group">
-      <label for="newsletter-name">Newsletter name</label>
+      <label for="newsletter-name">Blog name</label>
       <input type="text" id="newsletter-name" placeholder="e.g. The Morning Brief" autofocus>
       <div class="subdomain-preview" id="subdomain-preview"></div>
     </div>
@@ -184,12 +184,12 @@
 <div class="screen" id="screen-processing">
   <div class="processing-center">
     <div class="spinner"></div>
-    <h1>Setting up your newsletter</h1>
+    <h1>Setting up your blog</h1>
     <p class="subtitle">This takes about 10 seconds.</p>
     <ul class="processing-steps">
       <li class="active" id="step-site"><span class="check"></span> Creating your site</li>
-      <li class="pending" id="step-theme"><span class="check"></span> Applying newsletter template</li>
-      <li class="pending" id="step-settings"><span class="check"></span> Configuring email settings</li>
+      <li class="pending" id="step-theme"><span class="check"></span> Applying blog template</li>
+      <li class="pending" id="step-settings"><span class="check"></span> Configuring settings</li>
       <li class="pending" id="step-ready"><span class="check"></span> Ready to write</li>
     </ul>
   </div>
@@ -232,25 +232,25 @@
     </div>
 
     <div class="publish-card">
-      <div class="publish-card-label">Add subscribers</div>
-      <p class="subscriber-note" style="margin-bottom: 12px; margin-top: -6px;">You don't have any subscribers yet. Add some so they get your next post by email.</p>
+      <div class="publish-card-label">Add subscribers and turn it into a newsletter</div>
+      <p class="subscriber-note" style="margin-bottom: 12px; margin-top: -6px;">Let readers subscribe and get your posts by email.</p>
       <div class="subscriber-actions">
         <a href="#" class="subscriber-action" onclick="event.preventDefault()">
-          <svg class="subscriber-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M16 21V19C16 16.7909 14.2091 15 12 15H5C2.79086 15 1 16.7909 1 19V21M20 8V14M23 11H17M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="subscriber-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6ZM20 6L12 11L4 6H20ZM20 18H4V8L12 13L20 8V18Z" fill="currentColor"/></svg>
           <div class="subscriber-action-text">
-            <span class="subscriber-action-title">Add manually</span>
-            <span class="subscriber-action-desc">Type in email addresses one by one</span>
+            <span class="subscriber-action-title">Enable newsletter</span>
+            <span class="subscriber-action-desc">Add a subscribe form and send posts as emails</span>
           </div>
         </a>
         <a href="#" class="subscriber-action" onclick="event.preventDefault()">
           <svg class="subscriber-action-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <div class="subscriber-action-text">
-            <span class="subscriber-action-title">Import from another platform</span>
-            <span class="subscriber-action-desc">Substack, Mailchimp, Ghost, or CSV file</span>
+            <span class="subscriber-action-title">Import subscribers</span>
+            <span class="subscriber-action-desc">From Substack, Mailchimp, Ghost, or CSV</span>
           </div>
         </a>
       </div>
-      <p class="subscriber-note">You can skip this and add subscribers later.</p>
+      <p class="subscriber-note">You can set this up later from your dashboard.</p>
     </div>
 
     <div class="publish-card">
@@ -307,12 +307,12 @@
 <div class="screen" id="screen-congrats">
   <div class="congrats-container">
     <div class="congrats-icon">&#x1f389;</div>
-    <h1 class="congrats-heading" style="white-space: nowrap;">Your newsletter is live!</h1>
+    <h1 class="congrats-heading" style="white-space: nowrap;">Your first post is live!</h1>
     <p class="subtitle" style="margin-bottom: 40px; text-align: center;">It's out there on the web. Now let's make it yours.</p>
     <div class="congrats-links">
       <a href="#" class="congrats-link" onclick="event.preventDefault()">
         <div class="congrats-link-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M2 6C2 4.89543 2.89543 4 4 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6Z" stroke="currentColor" stroke-width="1.5"/><path d="M8 12H16M8 8H16M8 16H12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-        <div class="congrats-link-text"><span class="congrats-link-title">View my newsletter</span><span class="congrats-link-desc">See your published post live on the web</span></div>
+        <div class="congrats-link-text"><span class="congrats-link-title">View my blog</span><span class="congrats-link-desc">See your published post live on the web</span></div>
         <svg class="congrats-link-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <a href="#" class="congrats-link" onclick="event.preventDefault()">
@@ -331,8 +331,8 @@
 
 <div class="annotation" id="annotation">
   <div>
-    <div class="annotation-label">New Creator Onboarding — Prototype</div>
-    <div class="annotation-text" id="annotation-text"><strong>Step 1 of 4:</strong> One field. Name your newsletter, get a free subdomain. No domain search, no plan selection.</div>
+    <div class="annotation-label">New Blogger Onboarding — Prototype</div>
+    <div class="annotation-text" id="annotation-text"><strong>Step 1 of 4:</strong> One field. Name your blog, get a free subdomain. No domain search, no plan selection.</div>
   </div>
   <div class="step-indicator" id="step-indicator">1 / 4</div>
 </div>
@@ -372,7 +372,7 @@
 
   function goToProcessing() {
     switchScreen('screen-processing');
-    updateAnnotation('<strong>Step 2 of 4:</strong> Auto-create a free site with a newsletter template. No choices. About 10 seconds.', 2);
+    updateAnnotation('<strong>Step 2 of 4:</strong> Auto-create a free site with a blog template. No choices. About 10 seconds.', 2);
     updateComparisonStep(2);
     const steps = ['step-site', 'step-theme', 'step-settings', 'step-ready'];
     let i = 0;
@@ -405,7 +405,7 @@
     document.getElementById('seo-desc').textContent = excerpt || 'Add a meta description to control how this post appears in search results.';
     document.getElementById('seo-slug').value = slug;
     document.getElementById('screen-publish').classList.add('active');
-    updateAnnotation('<strong>Step 4 of 4:</strong> New user: no subscribers yet. "Add subscribers" replaces audience picker. Import from Substack, Mailchimp, or add manually.', 4);
+    updateAnnotation('<strong>Step 4 of 4:</strong> Blog post to the web. Option to add subscribers and turn it into a newsletter.', 4);
     updateComparisonStep(4);
   }
 
@@ -420,7 +420,7 @@
     document.getElementById('congrats-subdomain').textContent = `${newsletterSlug}.wordpress.com`;
     switchScreen('screen-congrats');
     document.getElementById('comparison').style.display = 'none';
-    updateAnnotation('<strong>Done.</strong> Name → Create → Write → Publish. New creator goes from zero to published in under 60 seconds.', '✓', '✓');
+    updateAnnotation('<strong>Done.</strong> Name → Create → Write → Publish. New blogger goes from zero to published in under 60 seconds.', '✓', '✓');
   }
 </script>
 </body>
